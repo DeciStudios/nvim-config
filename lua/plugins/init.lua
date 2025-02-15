@@ -97,7 +97,7 @@ local plugins = {
       require("copilot").setup({
         suggestion={enabled=false},
         panel={enabled=false},
-        copilot_node_command="C:/Users/jackm/AppData/Local/fnm_multishells/25708_1739059565931/node.exe"
+        -- copilot_node_command="C:/Users/jackm/AppData/Local/fnm_multishells/25708_1739059565931/node.exe"
       })
     end,
   },
