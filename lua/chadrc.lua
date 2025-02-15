@@ -3,12 +3,11 @@ local M = {}
 
 
 M.base46 = {
-  theme="aylin"
+  theme="aylin",
+  transparency=true,
 }
 
 M.ui = {
-  
-  transparency = false,
   statusline = {
     theme = "minimal",
     separator_style = "round",
@@ -61,11 +60,12 @@ if vim.g.neovide then
   vim.o.guifont= "FiraCode Nerd Font:h13:b"
   local default_path = vim.fn.expand("~/Documents/Projects")
   vim.api.nvim_set_current_dir(default_path)
+
   --vim.g.neovide_font_size = 12
   --vim.g.neovide
   -- vim.g.neovide_transparency = 0.8
   -- vim.g.neovide_window_blurred = true
-  M.ui.transparency  = false
+  M.base46.transparency  = false
 end
 
 
