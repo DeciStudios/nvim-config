@@ -3,8 +3,8 @@ local M = {}
 
 
 M.base46 = {
-  theme="aylin",
-  transparency=true,
+  theme="eldritch",
+  -- transparency=true,
 }
 
 M.ui = {
@@ -61,12 +61,17 @@ if vim.g.neovide then
   local default_path = vim.fn.expand("~/Documents/Projects")
   vim.api.nvim_set_current_dir(default_path)
 
-  --vim.g.neovide_font_size = 12
+  vim.g.neovide_font_size = 12
   --vim.g.neovide
-  -- vim.g.neovide_transparency = 0.8
-  -- vim.g.neovide_window_blurred = true
-  M.base46.transparency  = false
+  -- M.base46.transparency = false
+  -- require("base46").toggle_transparency()
+  -- require('nvchad.base46').load_all_highlights()
+
+  vim.g.neovide_transparency = 0.6
+  vim.g.neovide_window_blurred = true
+  -- require('base46').toggle_transparency()
 end
+
 
 
 return M

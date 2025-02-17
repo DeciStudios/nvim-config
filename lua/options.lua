@@ -1,3 +1,4 @@
 require "nvchad.options"
-vim.o.shell = "powershell.exe"
-
+if vim.loop.os_uname().sysname == "Windows_NT" then
+  vim.o.shell = "powershell.exe"
+end

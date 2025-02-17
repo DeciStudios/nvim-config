@@ -32,3 +32,8 @@ lspconfig.glsl_analyzer.setup({
   capabilities = capabilities,
   filetypes = { "glsl", "frag", "vert" },  -- adjust this to the filetypes that glsl-analyzer should handle
 })
+
+return {
+  on_attach = on_attach,
+  capabilities = capabilities,
+}

@@ -90,4 +90,4 @@ vim.api.nvim_set_keymap('x', '<C-S-C>', '"+y', { noremap = true, silent = true }
 -- Map Ctrl+Shift+V to paste in insert mode
 vim.api.nvim_set_keymap('i', '<C-S-V>', '<C-R>+', { noremap = true, silent = true })
 
--- require "plugins"
+
