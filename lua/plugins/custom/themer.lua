@@ -40,7 +40,11 @@ end
 
 -- Apply theme
 local function apply_theme(theme, is_preview)
-    vim.cmd("colorscheme " .. theme.colorscheme)
+    local status, _ = pcall(vim.cmd, "colorscheme " .. theme.colorscheme)
+    if not status then
+        -- If theme fails to load, do nothing
+        return
+    end
 
     if not is_preview then
         save_theme(theme.colorscheme)
@@ -99,7 +103,7 @@ local function create_preview_window()
 
     -- Set window options
     api.nvim_win_set_option(list_win, 'cursorline', true)
-    api.nvim_win_set_option(list_win, 'winhighlight', 'CursorLine:PmenuSel,Normal:PreviewTheme')
+    api.nvim_win_set_option(list_win, 'winhighlight', 'CursorLine:PreviewTheme')
     api.nvim_win_set_option(list_win, 'number', false)
     api.nvim_win_set_option(list_win, 'signcolumn', 'no')
 
@@ -120,6 +124,19 @@ function M.select_theme()
 
     -- Create highlight group for preview
     vim.cmd([[highlight PreviewTheme guibg=#404040]])
+
+    -- Disable buffer local mappings
+    local function clear_mappings(buf)
+        for _, mode in ipairs({ 'n', 'i', 'v' }) do
+            api.nvim_buf_set_keymap(buf, mode, '<Up>', '', {})
+            api.nvim_buf_set_keymap(buf, mode, '<Down>', '', {})
+            api.nvim_buf_set_keymap(buf, mode, '<CR>', '', {})
+            api.nvim_buf_set_keymap(buf, mode, '<Esc>', '', {})
+        end
+    end
+
+    clear_mappings(list_buf)
+    clear_mappings(search_buf)
 
     -- Function to update buffer content
     local function update_buffer()
@@ -165,9 +182,6 @@ function M.select_theme()
     -- Enable insert mode in search buffer
     vim.cmd("startinsert")
 
-    -- Set up keymaps
-    local opts = { noremap = true, silent = true, callback = true }
-
     -- Search buffer keymaps
     api.nvim_buf_set_keymap(search_buf, 'i', '<CR>', '', {
         callback = function() _G.theme_selector_apply_current() end
@@ -176,10 +190,18 @@ function M.select_theme()
         callback = function() _G.theme_selector_close() end
     })
     api.nvim_buf_set_keymap(search_buf, 'i', '<Up>', '', {
-        callback = function() _G.theme_selector_move_cursor(-1) end
+        callback = function()
+            vim.cmd("stopinsert")
+            _G.theme_selector_move_cursor(-1)
+            vim.cmd("startinsert")
+        end
     })
     api.nvim_buf_set_keymap(search_buf, 'i', '<Down>', '', {
-        callback = function() _G.theme_selector_move_cursor(1) end
+        callback = function()
+            vim.cmd("stopinsert")
+            _G.theme_selector_move_cursor(1)
+            vim.cmd("startinsert")
+        end
     })
 
     -- Update search on text change
@@ -222,7 +244,6 @@ function M.select_theme()
                 update_buffer()
             end
         end
-        vim.cmd("startinsert")
     end
 
     _G.theme_selector_apply_current = function()
@@ -237,6 +258,13 @@ function M.select_theme()
     end
 
     _G.theme_selector_close = function()
+        -- Restore previous theme
+        for _, theme in ipairs(themes) do
+            if theme.colorscheme == current_theme then
+                apply_theme(theme, false)
+                break
+            end
+        end
         api.nvim_win_close(search_win, true)
         api.nvim_win_close(list_win, true)
         api.nvim_win_close(main_win, true)
