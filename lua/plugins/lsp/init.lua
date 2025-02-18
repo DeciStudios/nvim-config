@@ -2,7 +2,7 @@ local M = {
     {
         "williamboman/mason.nvim",
         build = ":MasonUpdate",
-        cmd = "Mason",
+        cmd = { "Mason", "MasonInstall", "MasonUpdate" },
         event = "BufReadPre",
         config = function()
             require("mason").setup()
@@ -33,7 +33,18 @@ local M = {
             require("configs.lsp.languages")
         end
     },
-
+    {
+        "nvim-treesitter/nvim-treesitter",
+        event = { "BufReadPost", "BufNewFile" },
+        cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
+        build = ":TSUpdate",
+        opts = function()
+            return require "configs.lsp.treesitter"
+        end,
+        config = function(_, opts)
+            require("nvim-treesitter.configs").setup(opts)
+        end,
+    },
 
 
 }

@@ -15,7 +15,7 @@ M.defaults = {
 
 }
 
-M.extensions_list = { "themes", "terms" }
+M.extensions_list = { "terms" }
 M.extensions = {}
 
 return M

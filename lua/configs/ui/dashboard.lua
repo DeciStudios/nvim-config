@@ -34,7 +34,8 @@ local M = {
         " ▀▄       ▄▀  █ █ █   ██     █ ",
         "   ▀▀▄▄▄▀▀    █▄█  █▄▄█ █▄▄▄█  ",
         "                               ",
-        " Powered By  eovim",
+        "DeciDev's vim Config",
+        "(To exit, just power off your computer)",
         ""
     },
     center = {
@@ -91,8 +92,11 @@ local M = {
     },
     footer = {
         "",
-        "🚀 Have fun with neovim",
-        "   Total Plugins: " .. require("lazy").stats().count,
+        "== Fortnite Quote of the Day ==",
+        '"' .. require("plugins.custom.fnquote").quote_of_the_day() .. '"',
+        "",
+        "",
+        "Total Plugins:" .. require("lazy").stats().count,
     }
 }
 

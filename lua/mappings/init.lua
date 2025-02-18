@@ -5,10 +5,11 @@ local M = {}
 
 function M.setup()
     local nav = require("mappings.nav")
-    local theming = require("mappings.theming")
     local ui = require("mappings.ui")
+    local settings = require("mappings.settings")
+    local editing = require("mappings.editing")
 
-    M.keymaps = merge(nav, theming, ui)
+    M.keymaps = merge(nav, ui, settings, editing)
 
     M.keymaps.help = {
         n = {
@@ -27,7 +28,7 @@ function M.setup()
                     require("mappings.cheatsheet").show_cheatsheet()
                 end,
                 "Open Cheatsheet"
-            }
+            },
         }
     }
 

@@ -9,6 +9,8 @@ local config = {
     width = 60,
     height = 20,
     border = "rounded",
+    -- Add checkmark symbol (you can change this to your preferred nerdfont icon)
+    checkmark = "",
 }
 
 -- Function to save theme to a file
@@ -104,13 +106,11 @@ local function create_preview_window()
     -- Window options
     local win_opts = {
         relative = 'editor',
-        row = row,
+        row = row + 3, -- Move main window down by 1 for search box
         col = col,
         width = width,
-        height = height,
+        height = height - 1, -- Reduce height by 1 for search box
         style = 'minimal',
-        title = "Themer",
-        title_pos = "center",
         border = config.border,
     }
 
@@ -124,7 +124,7 @@ local function create_preview_window()
     api.nvim_buf_set_option(search_buf, 'buftype', 'prompt')
     api.nvim_buf_set_option(search_buf, 'bufhidden', 'hide')
 
-    -- Create search window
+    -- Create search window with border
     local search_win = api.nvim_open_win(search_buf, true, {
         relative = 'editor',
         row = row,
@@ -132,7 +132,9 @@ local function create_preview_window()
         width = width,
         height = 1,
         style = 'minimal',
-        border = 'none',
+        title = "Themer",
+        title_pos = "center",
+        border = config.border,
     })
 
     -- Set up prompt
@@ -146,6 +148,8 @@ function M.select_theme()
     local buf, win, search_buf, search_win = create_preview_window()
     local themes = config.themes
     local current_items = {}
+    local saved_theme = load_saved_theme()
+    local ns_id = api.nvim_create_namespace('themer_highlights')
 
     -- Function to update buffer content with fuzzy search
     local function update_buffer(filter)
@@ -155,18 +159,36 @@ function M.select_theme()
         for _, theme in ipairs(themes) do
             if fuzzy_match(theme.name, filter) then
                 table.insert(current_items, theme)
-                table.insert(lines, theme.name)
+                -- Add padding for checkmark
+                local line = "   " .. theme.name
+                table.insert(lines, line)
             end
         end
 
-        -- Allow buffer modification temporarily
+        -- Clear existing highlights
+        api.nvim_buf_clear_namespace(buf, ns_id, 0, -1)
+
+        -- Allow buffer modification
         api.nvim_buf_set_option(buf, 'modifiable', true)
+
+        -- Update lines
         vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+
+        -- Add checkmarks and highlights
+        for i, theme in ipairs(current_items) do
+            -- Add checkmark for saved theme
+            if theme.colorscheme == saved_theme then
+                api.nvim_buf_add_highlight(buf, ns_id, 'DiagnosticOk', i - 1, 0, 3)
+                api.nvim_buf_set_text(buf, i - 1, 0, i - 1, 1, { config.checkmark })
+            end
+        end
+
+        -- Disable modification again
         api.nvim_buf_set_option(buf, 'modifiable', false)
 
         -- If we have filtered results, preview the first one
         if #current_items > 0 then
-            apply_theme(current_items[1], true)
+            M.move_cursor(win, buf, ns_id, current_items, 1)
         end
     end
 
@@ -195,26 +217,31 @@ function M.select_theme()
         end
     })
 
+    -- Set up highlight groups
+    vim.api.nvim_set_hl(0, 'ThemerSelected', { link = 'Visual' })
+    vim.api.nvim_set_hl(0, 'DiagnosticOk', { fg = 'Green' })
+
     -- Handle navigation and selection
     vim.keymap.set('i', '<Up>', function()
-        local idx = math.max(1, (api.nvim_win_get_cursor(win)[1] - 1))
-        api.nvim_win_set_cursor(win, { idx, 0 })
-        local selected = current_items[idx]
-        if selected then
-            apply_theme(selected, true)
+        if #current_items == 0 then return end
+        local pos = api.nvim_win_get_cursor(win)[1] - 1
+        if pos == 0 then
+            pos = #current_items
         end
+        M.move_cursor(win, buf, ns_id, current_items, pos)
     end, { buffer = search_buf, noremap = true, silent = true })
 
     vim.keymap.set('i', '<Down>', function()
-        local idx = math.min(#current_items, (api.nvim_win_get_cursor(win)[1] + 1))
-        api.nvim_win_set_cursor(win, { idx, 0 })
-        local selected = current_items[idx]
-        if selected then
-            apply_theme(selected, true)
+        if #current_items == 0 then return end
+        local pos = api.nvim_win_get_cursor(win)[1] + 1
+        if pos > #current_items then
+            pos = 1
         end
+        M.move_cursor(win, buf, ns_id, current_items, pos)
     end, { buffer = search_buf, noremap = true, silent = true })
 
     vim.keymap.set('i', '<CR>', function()
+        if #current_items == 0 then return end
         local idx = api.nvim_win_get_cursor(win)[1]
         local selected = current_items[idx]
         if selected then
@@ -223,18 +250,46 @@ function M.select_theme()
             pcall(api.nvim_win_close, search_win, true)
             pcall(api.nvim_buf_delete, buf, { force = true })
             pcall(api.nvim_buf_delete, search_buf, { force = true })
+            vim.cmd('stopinsert')
         end
     end, { buffer = search_buf, noremap = true, silent = true })
 
     vim.keymap.set('i', '<Esc>', function()
+        local colorscheme = load_saved_theme()
+        if type(colorscheme) == "string" then
+            apply_theme({ colorscheme = colorscheme }, false)
+        end
         pcall(api.nvim_win_close, win, true)
         pcall(api.nvim_win_close, search_win, true)
         pcall(api.nvim_buf_delete, buf, { force = true })
         pcall(api.nvim_buf_delete, search_buf, { force = true })
+        vim.cmd('stopinsert')
     end, { buffer = search_buf, noremap = true, silent = true })
+
+    --Get current theme and set cursor to it
+    for i, theme in ipairs(current_items) do
+        if theme.colorscheme == saved_theme then
+            M.move_cursor(win, buf, ns_id, current_items, i)
+            break
+        end
+    end
 
     -- Start in insert mode
     vim.cmd('startinsert')
+end
+
+function M.move_cursor(win, buf, ns_id, current_items, index)
+    local idx = math.min(#current_items, index)
+    api.nvim_win_set_cursor(win, { idx, 0 })
+    local selected = current_items[idx]
+    if selected then
+        apply_theme(selected, true)
+        api.nvim_buf_clear_namespace(buf, ns_id, 0, -1)
+        api.nvim_buf_add_highlight(buf, ns_id, 'Bold', idx - 1, 0, -1)
+        vim.api.nvim_set_hl(0, 'Bold', { bold = true })
+        api.nvim_buf_add_highlight(buf, ns_id, 'ThemerFaded', idx - 1, 0, -1)
+        vim.api.nvim_set_hl(0, 'ThemerFaded', { link = 'Function' })
+    end
 end
 
 -- Setup function

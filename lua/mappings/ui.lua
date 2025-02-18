@@ -98,7 +98,7 @@ M.telescope = {
             "<cmd>Telescope find_files follow=true no_ignore=true hidden=true<CR>",
             "Find in hidden files"
         },
-        ["<leader>cd"] = {
+        ["<leader>fd"] = {
             function()
                 require("telescope").extensions.file_browser.file_browser()
             end,
