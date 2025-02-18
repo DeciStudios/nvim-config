@@ -56,36 +56,46 @@ local function create_preview_window()
     local row = math.floor((vim.o.lines - height) / 2)
     local col = math.floor((vim.o.columns - width) / 2)
 
-    -- Create buffers
-    local search_buf = api.nvim_create_buf(false, true)
-    local list_buf = api.nvim_create_buf(false, true)
-
-    -- Window options
-    local list_win_opts = {
+    -- Create main window and buffer
+    local main_buf = api.nvim_create_buf(false, true)
+    local main_win_opts = {
         relative = 'editor',
         row = row,
         col = col,
         width = width,
-        height = height - 3, -- Reduce height to make room for search
+        height = height,
         style = 'minimal',
         title = "Themer",
         title_pos = "center",
         border = config.border,
     }
+    local main_win = api.nvim_open_win(main_buf, true, main_win_opts)
 
+    -- Create search buffer and window inside main window
+    local search_buf = api.nvim_create_buf(false, true)
     local search_win_opts = {
-        relative = 'editor',
-        row = row + height - 2,
-        col = col + 2,
+        relative = 'win',
+        win = main_win,
+        row = 1,
+        col = 2,
         width = width - 4,
         height = 1,
         style = 'minimal',
-        border = config.border,
     }
-
-    -- Create windows
-    local list_win = api.nvim_open_win(list_buf, false, list_win_opts)
     local search_win = api.nvim_open_win(search_buf, true, search_win_opts)
+
+    -- Create list buffer and window below search
+    local list_buf = api.nvim_create_buf(false, true)
+    local list_win_opts = {
+        relative = 'win',
+        win = main_win,
+        row = 3,
+        col = 2,
+        width = width - 4,
+        height = height - 5,
+        style = 'minimal',
+    }
+    local list_win = api.nvim_open_win(list_buf, false, list_win_opts)
 
     -- Set window options
     api.nvim_win_set_option(list_win, 'cursorline', true)
@@ -94,15 +104,16 @@ local function create_preview_window()
     -- Initialize search buffer with placeholder
     api.nvim_buf_set_lines(search_buf, 0, -1, false, { "" })
 
-    return search_buf, list_buf, search_win, list_win
+    return search_buf, list_buf, search_win, list_win, main_win
 end
 
 -- Show theme selector
 function M.select_theme()
-    local search_buf, list_buf, search_win, list_win = create_preview_window()
+    local search_buf, list_buf, search_win, list_win, main_win = create_preview_window()
     local themes = config.themes
     local current_items = {}
     local search_text = ""
+    local current_theme = vim.g.colors_name
 
     -- Function to update buffer content
     local function update_buffer()
@@ -112,7 +123,11 @@ function M.select_theme()
         for _, theme in ipairs(themes) do
             if theme.name:lower():find(search_text:lower(), 1, true) then
                 table.insert(current_items, theme)
-                table.insert(lines, theme.name)
+                local line = theme.name
+                if theme.colorscheme == current_theme then
+                    line = "* " .. line
+                end
+                table.insert(lines, line)
             end
         end
 
@@ -177,6 +192,7 @@ function M.select_theme()
     M.current_windows = {
         search_win = search_win,
         list_win = list_win,
+        main_win = main_win,
         current_items = current_items
     }
 
@@ -203,12 +219,14 @@ function M.select_theme()
             apply_theme(selected, false)
             api.nvim_win_close(search_win, true)
             api.nvim_win_close(list_win, true)
+            api.nvim_win_close(main_win, true)
         end
     end
 
     _G.theme_selector_close = function()
         api.nvim_win_close(search_win, true)
         api.nvim_win_close(list_win, true)
+        api.nvim_win_close(main_win, true)
     end
 end
 
