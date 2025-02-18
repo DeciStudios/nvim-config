@@ -6,7 +6,16 @@ local M = {
         event = "InsertEnter",
         config = function()
             require("copilot").setup({})
+            require("configs.ai.copilot")
         end,
+    },
+    {
+        "zbirenbaum/copilot-cmp",
+        dependencies = { "copilot.lua" },
+        event = "InsertEnter",
+        config = function()
+            require("copilot_cmp").setup()
+        end
     },
     {
         "CopilotC-Nvim/CopilotChat.nvim",
@@ -14,7 +23,7 @@ local M = {
         cmd = "CopilotChat",
         dependencies = {
             { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
-            { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
+            { "nvim-lua/plenary.nvim" },  -- for curl, log wrapper
         },
         config = function()
             require("CopilotChat").setup(require("configs.ai.copilotchat"))

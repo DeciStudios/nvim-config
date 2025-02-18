@@ -103,5 +103,17 @@ local M = {
             })
         end
     },
+    {
+        "j-hui/fidget.nvim",
+        opts = {
+            -- options
+        },
+    },
+    {
+        'akinsho/toggleterm.nvim',
+        config = function()
+            require("toggleterm").setup(require("configs.ui.terminal.opts"))
+        end
+    }
 }
 return M

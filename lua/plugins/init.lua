@@ -13,3 +13,5 @@ local plugs = merge(ui, formatting, lsp, theming, ai, libs)
 require("lazy").setup(
     plugs
 )
+
+require("plugins.custom")

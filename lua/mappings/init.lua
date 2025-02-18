@@ -1,5 +1,5 @@
 local merge = require("utils.merge")
-local cheatsheet = require("mappings.cheatsheet")
+local cheatsheet = require("plugins.custom.cheatsheet")
 -- Initialize M once
 local M = {}
 

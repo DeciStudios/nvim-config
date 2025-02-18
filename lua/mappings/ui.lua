@@ -106,8 +106,35 @@ M.telescope = {
         },
     }
 }
+local terminals = require("configs.ui.terminal")
 
-M.telescope.n["cd"] = M.telescope.n["<leader>cd"]
-M.telescope.n["ff"] = M.telescope.n["<leader>ff"]
+M.terminal = {
+    n = {
+        ["<leader>th"] = {
+            function() terminals.horizontal:toggle() end,
+            "Toggle horizontal terminal"
+        },
+        ["<leader>tv"] = {
+            function() terminals.vertical:toggle() end,
+            "Toggle vertical terminal"
+        },
+        ["<leader>tnh"] = {
+            function() terminals.new_horizontal() end,
+            "New horizontal terminal"
+        },
+        ["<leader>tnv"] = {
+            function() terminals.new_vertical() end,
+            "New vertical terminal"
+        },
+    },
+    t = {}
+}
+
+M.terminal.n["<A-h>"] = M.terminal.n["<leader>th"]
+M.terminal.n["<A-v>"] = M.terminal.n["<leader>tv"]
+M.terminal.t["<A-h>"] = M.terminal.t["<leader>th"]
+M.terminal.t["<A-v>"] = M.terminal.t["<leader>tv"]
+-- M.telescope.n["cd"] = M.telescope.n["<leader>cd"]
+-- M.telescope.n["ff"] = M.telescope.n["<leader>ff"]
 
 return M

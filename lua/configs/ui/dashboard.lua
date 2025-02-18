@@ -1,16 +1,41 @@
+--[[
+
+
+
+
+--]]
+
 local M = {
 
     header = {
-        "                                                                     ",
-        "                                                                     ",
-        "██████╗ ███████╗ ██████╗██╗██╗   ██╗██╗███╗   ███╗                 ",
-        "██╔══██╗██╔════╝██╔════╝██║██║   ██║██║████╗ ████║                 ",
-        "██║  ██║█████╗  ██║     ██║██║   ██║██║██╔████╔██║                 ",
-        "██║  ██║██╔══╝  ██║     ██║╚██╗ ██╔╝██║██║╚██╔╝██║                 ",
-        "██████╔╝███████╗╚██████╗██║ ╚████╔╝ ██║██║ ╚═╝ ██║                 ",
-        "╚═════╝ ╚══════╝ ╚═════╝╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝                 ",
-        "                                                                     ",
-        "                                                                     "
+        -- "    ▄▄▄                                  ▄▄     ▄ ▄▄   ▄▄ ",
+        -- "  ▄▀▀   ▀▀▄                              █  █  █ █  █ █  █",
+        -- " █       ▄▄█ ██████  ███████ ██████ ██  █   █▄█ █  █▄█  █",
+        -- "█    ▄▄▀▀    ██   ██ ██      ██     ██  █       █       █",
+        -- "▀▄     ▀▀▄▄▄ ██   ██ █████   ██     ██  █  ▄    █       █",
+        -- " ▀▄       ▄▀ ██   ██ ██      ██     ██  █ █ █   ██     █ ",
+        -- "   ▀▀▄▄▄▀▀   ██████  ███████ ██████ ██  █▄█  █▄▄█ █▄▄▄█  ",
+        -- ""
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "     ▄▄▄       ▄▄    ▄ ▄▄   ▄▄ ",
+        "  ▄▀▀   ▀▀▄   █  █  █ █  █ █  █",
+        " █       ▄▄█  █   █▄█ █  █▄█  █",
+        "█    ▄▄▀▀     █       █       █",
+        "▀▄     ▀▀▄▄▄  █  ▄    █       █",
+        " ▀▄       ▄▀  █ █ █   ██     █ ",
+        "   ▀▀▄▄▄▀▀    █▄█  █▄▄█ █▄▄▄█  ",
+        "                               ",
+        " Powered By  eovim",
+        ""
     },
     center = {
         {
@@ -21,6 +46,17 @@ local M = {
             key = "f",
             key_hl = "Number",
             action = "Telescope find_files"
+        },
+        {
+            icon = " ",
+            icon_hl = "Title",
+            desc = "Open File Browser",
+            desc_hl = "String",
+            key = "d",
+            key_hl = "Number",
+            action = function()
+                require("telescope").extensions.file_browser.file_browser()
+            end,
         },
         {
             icon = " ",
@@ -43,11 +79,14 @@ local M = {
         {
             icon = " ",
             icon_hl = "Title",
-            desc = "Config",
+            desc = "Enter Config",
             desc_hl = "String",
             key = "c",
             key_hl = "Number",
-            action = "e ~/.config/nvim/init.lua"
+            action = function()
+                vim.cmd("cd ~/.config/nvim/")
+                vim.notify("Moved to nvim config directory. Have fun!")
+            end
         },
     },
     footer = {
