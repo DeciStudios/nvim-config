@@ -4,23 +4,17 @@ local M = {
         "zaldih/themery.nvim",
         lazy = false,
         config = function()
-            require("themery").setup(require("configs.themery"))
+            require("themery").setup(require("configs.theming.themery"))
         end
     },
     --Themes
     {
         "navarasu/onedark.nvim",
         lazy = true,
-        config = function()
-            require("onedark").setup()
-        end
     },
     {
         "folke/tokyonight.nvim",
         lazy = true,
-        config = function()
-            require("tokyonight").setup()
-        end
     },
     {
         "sainnhe/sonokai",
@@ -29,6 +23,50 @@ local M = {
             vim.g.sonokai_style = "andromeda"
             vim.g.sonokai_enable_italic = 1
         end
+    },
+    {
+        "shaunsingh/nord.nvim",
+        lazy = true,
+    },
+    {
+        "catppuccin/nvim",
+        lazy = true,
+    },
+    {
+        "eldritch-theme/eldritch.nvim",
+        lazy = true,
+    },
+    {
+        "marko-cerovac/material.nvim",
+        lazy = true,
+    },
+    {
+        "mhartington/oceanic-next",
+        lazy = true,
+    },
+    {
+        "EdenEast/nightfox.nvim",
+        lazy = true,
+    },
+    {
+        "rmehri01/onenord.nvim",
+        lazy = true,
+    },
+    {
+        "ThePrimeagen/harpoon",
+        lazy = true,
+    },
+    {
+        "neanias/everforest-nvim",
+        lazy = true,
+    },
+    {
+        "luisiacc/gruvbox-baby",
+        lazy = true,
+    },
+    {
+        "Pocco81/Catppuccino.nvim",
+        lazy = true,
     },
 
 }
