@@ -91,7 +91,7 @@ local function create_preview_window()
         win = main_win,
         row = 3,
         col = 2,
-        width = width - 4,
+        width = width - 6, -- Reduced width to accommodate scrollbar
         height = height - 5,
         style = 'minimal',
     }
@@ -100,6 +100,8 @@ local function create_preview_window()
     -- Set window options
     api.nvim_win_set_option(list_win, 'cursorline', true)
     api.nvim_win_set_option(list_win, 'winhighlight', 'CursorLine:PmenuSel')
+    api.nvim_win_set_option(list_win, 'number', false)
+    api.nvim_win_set_option(list_win, 'signcolumn', 'no')
 
     -- Initialize search buffer with placeholder
     api.nvim_buf_set_lines(search_buf, 0, -1, false, { "" })
@@ -114,6 +116,7 @@ function M.select_theme()
     local current_items = {}
     local search_text = ""
     local current_theme = vim.g.colors_name
+    local previewing_theme = current_theme
 
     -- Function to update buffer content
     local function update_buffer()
@@ -126,6 +129,9 @@ function M.select_theme()
                 local line = theme.name
                 if theme.colorscheme == current_theme then
                     line = "* " .. line
+                end
+                if theme.colorscheme == previewing_theme then
+                    line = "> " .. line
                 end
                 table.insert(lines, line)
             end
@@ -206,7 +212,9 @@ function M.select_theme()
             api.nvim_win_set_cursor(list_win, { new_pos, 0 })
             local selected = current_items[new_pos]
             if selected then
+                previewing_theme = selected.colorscheme
                 apply_theme(selected, true)
+                update_buffer()
             end
         end
         vim.cmd("startinsert")
