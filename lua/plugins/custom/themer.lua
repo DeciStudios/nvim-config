@@ -91,7 +91,7 @@ local function create_preview_window()
         win = main_win,
         row = 3,
         col = 2,
-        width = width - 6, -- Reduced width to accommodate scrollbar
+        width = width - 6,
         height = height - 5,
         style = 'minimal',
     }
@@ -99,7 +99,7 @@ local function create_preview_window()
 
     -- Set window options
     api.nvim_win_set_option(list_win, 'cursorline', true)
-    api.nvim_win_set_option(list_win, 'winhighlight', 'CursorLine:PmenuSel')
+    api.nvim_win_set_option(list_win, 'winhighlight', 'CursorLine:PmenuSel,Normal:PreviewTheme')
     api.nvim_win_set_option(list_win, 'number', false)
     api.nvim_win_set_option(list_win, 'signcolumn', 'no')
 
@@ -117,6 +117,9 @@ function M.select_theme()
     local search_text = ""
     local current_theme = vim.g.colors_name
     local previewing_theme = current_theme
+
+    -- Create highlight group for preview
+    vim.cmd([[highlight PreviewTheme guibg=#404040]])
 
     -- Function to update buffer content
     local function update_buffer()
@@ -142,11 +145,13 @@ function M.select_theme()
         api.nvim_buf_set_lines(list_buf, 0, -1, false, lines)
         api.nvim_buf_set_option(list_buf, 'modifiable', false)
 
-        -- Keep cursor in bounds
+        -- Select first item when list updates
         if #lines > 0 then
-            local cursor = api.nvim_win_get_cursor(list_win)
-            if cursor[1] > #lines then
-                api.nvim_win_set_cursor(list_win, { #lines, 0 })
+            api.nvim_win_set_cursor(list_win, { 1, 0 })
+            local selected = current_items[1]
+            if selected then
+                previewing_theme = selected.colorscheme
+                apply_theme(selected, true)
             end
         end
     end
