@@ -11,7 +11,7 @@ local config = {
     border = "rounded",
 }
 
--- Function to save theme to data
+-- Function to save theme to a file
 local function save_theme(theme_name)
     local data_dir = vim.fn.stdpath('data')
     local theme_file = data_dir .. '/theme.txt'
@@ -23,11 +23,10 @@ local function save_theme(theme_name)
     end
 end
 
--- Load saved theme
+-- Function to load saved theme
 local function load_saved_theme()
     local data_dir = vim.fn.stdpath('data')
     local theme_file = data_dir .. '/theme.txt'
-    --SAVED IN ~/.local/share/nvim/theme.txt
 
     local file = io.open(theme_file, 'r')
     if file then
@@ -40,29 +39,70 @@ end
 
 -- Apply theme
 local function apply_theme(theme, is_preview)
-    local status, _ = pcall(vim.cmd, "colorscheme " .. theme.colorscheme)
-    if not status then
-        -- If theme fails to load, do nothing
-        return
-    end
+    -- Set colorscheme with error handling
+    local ok = pcall(vim.cmd, "colorscheme " .. theme.colorscheme)
+    if not ok then return end
 
+    -- Only save and update lualine for final selection, not preview
     if not is_preview then
         save_theme(theme.colorscheme)
+
+        -- Update lualine
+        -- local status_ok, lualine = pcall(require, "lualine")
+        -- if status_ok then
+        --     lualine.setup({
+        --         options = {
+        --             theme = theme.colorscheme
+        --         }
+        --     })
+        -- end
     end
 end
 
--- Create the preview window
+-- Fuzzy match function
+local function fuzzy_match(str, pattern)
+    if pattern == "" then return true end
+    local pattern_len = #pattern
+    local str_len = #str
+    local p_idx = 1
+    local s_idx = 1
+    local match = false
+
+    str = str:lower()
+    pattern = pattern:lower()
+
+    while s_idx <= str_len and p_idx <= pattern_len do
+        if str:sub(s_idx, s_idx) == pattern:sub(p_idx, p_idx) then
+            if p_idx == pattern_len then
+                match = true
+                break
+            end
+            p_idx = p_idx + 1
+        end
+        s_idx = s_idx + 1
+    end
+
+    return match
+end
+
+-- Create the preview window with search box
 local function create_preview_window()
     local width = config.width
-    local height = config.height
+    local height = config.height + 1 -- Add 1 for search box
 
     -- Calculate position
     local row = math.floor((vim.o.lines - height) / 2)
     local col = math.floor((vim.o.columns - width) / 2)
 
-    -- Create main window and buffer
-    local main_buf = api.nvim_create_buf(false, true)
-    local main_win_opts = {
+    -- Create buffer
+    local buf = api.nvim_create_buf(false, true)
+
+    -- Set buffer options to prevent modifications
+    api.nvim_buf_set_option(buf, 'modifiable', false)
+    api.nvim_buf_set_option(buf, 'buftype', 'nofile')
+
+    -- Window options
+    local win_opts = {
         relative = 'editor',
         row = row,
         col = col,
@@ -73,202 +113,128 @@ local function create_preview_window()
         title_pos = "center",
         border = config.border,
     }
-    local main_win = api.nvim_open_win(main_buf, true, main_win_opts)
 
-    -- Create search buffer and window inside main window
+    -- Create window
+    local win = api.nvim_open_win(buf, true, win_opts)
+    api.nvim_win_set_option(win, 'winblend', 0)
+    api.nvim_win_set_option(win, 'cursorline', true)
+
+    -- Create search buffer
     local search_buf = api.nvim_create_buf(false, true)
-    local search_win_opts = {
-        relative = 'win',
-        win = main_win,
-        row = 1,
-        col = 2,
-        width = width - 4,
+    api.nvim_buf_set_option(search_buf, 'buftype', 'prompt')
+    api.nvim_buf_set_option(search_buf, 'bufhidden', 'hide')
+
+    -- Create search window
+    local search_win = api.nvim_open_win(search_buf, true, {
+        relative = 'editor',
+        row = row,
+        col = col,
+        width = width,
         height = 1,
         style = 'minimal',
-    }
-    local search_win = api.nvim_open_win(search_buf, true, search_win_opts)
+        border = 'none',
+    })
 
-    -- Create list buffer and window below search
-    local list_buf = api.nvim_create_buf(false, true)
-    local list_win_opts = {
-        relative = 'win',
-        win = main_win,
-        row = 3,
-        col = 2,
-        width = width - 6,
-        height = height - 5,
-        style = 'minimal',
-    }
-    local list_win = api.nvim_open_win(list_buf, false, list_win_opts)
+    -- Set up prompt
+    vim.fn.prompt_setprompt(search_buf, 'Search: ')
 
-    -- Set window options
-    api.nvim_win_set_option(list_win, 'cursorline', true)
-    api.nvim_win_set_option(list_win, 'winhighlight', 'CursorLine:PreviewTheme')
-    api.nvim_win_set_option(list_win, 'number', false)
-    api.nvim_win_set_option(list_win, 'signcolumn', 'no')
-
-    -- Initialize search buffer with placeholder
-    api.nvim_buf_set_lines(search_buf, 0, -1, false, { "" })
-
-    return search_buf, list_buf, search_win, list_win, main_win
+    return buf, win, search_buf, search_win
 end
 
 -- Show theme selector
 function M.select_theme()
-    local search_buf, list_buf, search_win, list_win, main_win = create_preview_window()
+    local buf, win, search_buf, search_win = create_preview_window()
     local themes = config.themes
     local current_items = {}
-    local search_text = ""
-    local current_theme = vim.g.colors_name
-    local previewing_theme = current_theme
 
-    -- Create highlight group for preview
-    vim.cmd([[highlight PreviewTheme guibg=#404040]])
-
-    -- Disable buffer local mappings
-    local function clear_mappings(buf)
-        for _, mode in ipairs({ 'n', 'i', 'v' }) do
-            api.nvim_buf_set_keymap(buf, mode, '<Up>', '', {})
-            api.nvim_buf_set_keymap(buf, mode, '<Down>', '', {})
-            api.nvim_buf_set_keymap(buf, mode, '<CR>', '', {})
-            api.nvim_buf_set_keymap(buf, mode, '<Esc>', '', {})
-        end
-    end
-
-    clear_mappings(list_buf)
-    clear_mappings(search_buf)
-
-    -- Function to update buffer content
-    local function update_buffer()
+    -- Function to update buffer content with fuzzy search
+    local function update_buffer(filter)
         current_items = {}
         local lines = {}
 
         for _, theme in ipairs(themes) do
-            if theme.name:lower():find(search_text:lower(), 1, true) then
+            if fuzzy_match(theme.name, filter) then
                 table.insert(current_items, theme)
-                local line = theme.name
-                if theme.colorscheme == current_theme then
-                    line = "* " .. line
-                end
-                if theme.colorscheme == previewing_theme then
-                    line = "> " .. line
-                end
-                table.insert(lines, line)
+                table.insert(lines, theme.name)
             end
         end
 
-        -- Set buffer modifiable before updating
-        api.nvim_buf_set_option(list_buf, 'modifiable', true)
-        api.nvim_buf_set_lines(list_buf, 0, -1, false, lines)
-        api.nvim_buf_set_option(list_buf, 'modifiable', false)
+        -- Allow buffer modification temporarily
+        api.nvim_buf_set_option(buf, 'modifiable', true)
+        vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+        api.nvim_buf_set_option(buf, 'modifiable', false)
 
-        -- Select first item when list updates
-        if #lines > 0 then
-            api.nvim_win_set_cursor(list_win, { 1, 0 })
-            local selected = current_items[1]
-            if selected then
-                previewing_theme = selected.colorscheme
-                apply_theme(selected, true)
-            end
+        -- If we have filtered results, preview the first one
+        if #current_items > 0 then
+            apply_theme(current_items[1], true)
         end
     end
 
     -- Initial content
-    update_buffer()
+    update_buffer("")
 
-    -- Make list buffer readonly
-    api.nvim_buf_set_option(list_buf, 'modifiable', false)
-
-    -- Enable insert mode in search buffer
-    vim.cmd("startinsert")
-
-    -- Search buffer keymaps
-    api.nvim_buf_set_keymap(search_buf, 'i', '<CR>', '', {
-        callback = function() _G.theme_selector_apply_current() end
-    })
-    api.nvim_buf_set_keymap(search_buf, 'i', '<Esc>', '', {
-        callback = function() _G.theme_selector_close() end
-    })
-    api.nvim_buf_set_keymap(search_buf, 'i', '<Up>', '', {
-        callback = function()
-            vim.cmd("stopinsert")
-            _G.theme_selector_move_cursor(-1)
-            vim.cmd("startinsert")
-        end
-    })
-    api.nvim_buf_set_keymap(search_buf, 'i', '<Down>', '', {
-        callback = function()
-            vim.cmd("stopinsert")
-            _G.theme_selector_move_cursor(1)
-            vim.cmd("startinsert")
-        end
-    })
-
-    -- Update search on text change
-    api.nvim_create_autocmd("TextChanged", {
-        buffer = search_buf,
-        callback = function()
-            search_text = api.nvim_buf_get_lines(search_buf, 0, 1, false)[1]
-            update_buffer()
-        end
-    })
-
-    api.nvim_create_autocmd("TextChangedI", {
-        buffer = search_buf,
-        callback = function()
-            search_text = api.nvim_buf_get_lines(search_buf, 0, 1, false)[1]
-            update_buffer()
-        end
-    })
-
-    -- Store windows for other functions
-    M.current_windows = {
-        search_win = search_win,
-        list_win = list_win,
-        main_win = main_win,
+    -- Store buffer-local variables
+    vim.b[buf] = {
         current_items = current_items
     }
 
-    -- Create global functions for callbacks
-    _G.theme_selector_move_cursor = function(direction)
-        local cursor = api.nvim_win_get_cursor(list_win)
-        local new_pos = cursor[1] + direction
-        local line_count = #current_items
-
-        if new_pos >= 1 and new_pos <= line_count then
-            api.nvim_win_set_cursor(list_win, { new_pos, 0 })
-            local selected = current_items[new_pos]
-            if selected then
-                previewing_theme = selected.colorscheme
-                apply_theme(selected, true)
-                update_buffer()
-            end
+    -- Set up autocommand for search buffer changes
+    vim.api.nvim_create_autocmd("TextChanged", {
+        buffer = search_buf,
+        callback = function()
+            local search_text = vim.api.nvim_buf_get_lines(search_buf, 0, -1, false)[1]:gsub("^Search: ", "")
+            update_buffer(search_text)
         end
-    end
+    })
 
-    _G.theme_selector_apply_current = function()
-        local cursor = api.nvim_win_get_cursor(list_win)
-        local selected = current_items[cursor[1]]
+    vim.api.nvim_create_autocmd("TextChangedI", {
+        buffer = search_buf,
+        callback = function()
+            local search_text = vim.api.nvim_buf_get_lines(search_buf, 0, -1, false)[1]:gsub("^Search: ", "")
+            update_buffer(search_text)
+        end
+    })
+
+    -- Handle navigation and selection
+    vim.keymap.set('i', '<Up>', function()
+        local idx = math.max(1, (api.nvim_win_get_cursor(win)[1] - 1))
+        api.nvim_win_set_cursor(win, { idx, 0 })
+        local selected = current_items[idx]
+        if selected then
+            apply_theme(selected, true)
+        end
+    end, { buffer = search_buf, noremap = true, silent = true })
+
+    vim.keymap.set('i', '<Down>', function()
+        local idx = math.min(#current_items, (api.nvim_win_get_cursor(win)[1] + 1))
+        api.nvim_win_set_cursor(win, { idx, 0 })
+        local selected = current_items[idx]
+        if selected then
+            apply_theme(selected, true)
+        end
+    end, { buffer = search_buf, noremap = true, silent = true })
+
+    vim.keymap.set('i', '<CR>', function()
+        local idx = api.nvim_win_get_cursor(win)[1]
+        local selected = current_items[idx]
         if selected then
             apply_theme(selected, false)
-            api.nvim_win_close(search_win, true)
-            api.nvim_win_close(list_win, true)
-            api.nvim_win_close(main_win, true)
+            pcall(api.nvim_win_close, win, true)
+            pcall(api.nvim_win_close, search_win, true)
+            pcall(api.nvim_buf_delete, buf, { force = true })
+            pcall(api.nvim_buf_delete, search_buf, { force = true })
         end
-    end
+    end, { buffer = search_buf, noremap = true, silent = true })
 
-    _G.theme_selector_close = function()
-        -- Restore previous theme
-        for _, theme in ipairs(themes) do
-            if theme.colorscheme == current_theme then
-                apply_theme(theme, false)
-                break
-            end
-        end
-        api.nvim_win_close(search_win, true)
-        api.nvim_win_close(list_win, true)
-        api.nvim_win_close(main_win, true)
-    end
+    vim.keymap.set('i', '<Esc>', function()
+        pcall(api.nvim_win_close, win, true)
+        pcall(api.nvim_win_close, search_win, true)
+        pcall(api.nvim_buf_delete, buf, { force = true })
+        pcall(api.nvim_buf_delete, search_buf, { force = true })
+    end, { buffer = search_buf, noremap = true, silent = true })
+
+    -- Start in insert mode
+    vim.cmd('startinsert')
 end
 
 -- Setup function
