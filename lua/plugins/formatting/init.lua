@@ -38,6 +38,10 @@ local M = {
         },
     },
     {
+        "mbbill/undotree",
+        cmd = "UndotreeToggle",
+    },
+    {
         "onsails/lspkind.nvim"
     },
     {

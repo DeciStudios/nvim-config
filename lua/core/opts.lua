@@ -38,5 +38,10 @@ o.undofile = true
 
 -- interval for writing swap file to disk, also used by gitsigns
 o.updatetime = 250
-
+opt.winbar = ""    -- Disable the winbar
+opt.laststatus = 3 -- Global statusline
 opt.termguicolors = true
+opt.undofile = true
+opt.undodir = vim.fn.stdpath("data") .. "/undodir"
+opt.undolevels = 1000
+opt.undoreload = 10000

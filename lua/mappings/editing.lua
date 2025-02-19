@@ -34,6 +34,23 @@ M.editing = {
             '"+p',
             "Paste from system clipboard"
         },
+
+        ["<C-z>"] = {
+            "u",
+            "Undo"
+        },
+        ["<C-r>"] = {
+            "<C-r>",
+            "Redo"
+        },
+        ["<leader>u"] = {
+            "<cmd>UndotreeFocus<CR>",
+            "Focus Undotree"
+        },
+        ["<C-u>"] = {
+            "<cmd>UndotreeToggle<CR>",
+            "Toggle Undotree"
+        },
     },
     -- Visual mode mappings
     v = {
@@ -63,6 +80,24 @@ M.editing = {
                 require("conform").format({ async = true })
             end,
             "Format buffer"
+        },
+        ["<C-z>"] = {
+            "<esc>u",
+            "Undo"
+        },
+        ["<C-r>"] = {
+            "<esc><C-r>",
+            "Redo"
+        },
+    },
+    i = {
+        ["<C-z>"] = {
+            "<C-o>u",
+            "Undo"
+        },
+        ["<C-r>"] = {
+            "<C-o><C-r>",
+            "Redo"
         },
     }
 }

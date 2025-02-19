@@ -8,6 +8,7 @@ local M = {
     sidebar_filetypes = {
         -- Use the default values: {event = 'BufWinLeave', text = nil}
         NvimTree = { text = 'File Explorer' },
+        undotree = { text = 'Undo Tree' },
     },
 }
 

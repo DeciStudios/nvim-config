@@ -27,25 +27,26 @@ local M = {
         icons_enabled = false,
         component_separators = seperatorTypes.none.component,
         section_separators = seperatorTypes.none.section,
+        globalstatus = true, -- Add this line
     },
     sections = {
-            lualine_a = {{
-                'mode',
-                fmt = function(str)
-                    if str == "NORMAL" then
-                        return ' ' .. str
-                    elseif str == "INSERT" then
-                        return ' ' .. str
-                    elseif str == "VISUAL" then
-                        return '󰈈 ' .. str
-                    elseif str == "V-LINE" then
-                        return ' ' .. str
-                    end
+        lualine_a = { {
+            'mode',
+            fmt = function(str)
+                if str == "NORMAL" then
+                    return ' ' .. str
+                elseif str == "INSERT" then
+                    return ' ' .. str
+                elseif str == "VISUAL" then
+                    return '󰈈 ' .. str
+                elseif str == "V-LINE" then
+                    return ' ' .. str
                 end
-            } -- Add icon before the mode text
+            end
+        } -- Add icon before the mode text
         },
         lualine_b = {
-            "branch", 
+            "branch",
         },
         lualine_c = {
             'filename',
@@ -53,10 +54,13 @@ local M = {
             --    return vim.fn['nvim_treesitter#statusline'](180)
             --end
         },
-        lualine_x = {'copilot'},
-        lualine_y = {'location'},
-        lualine_z = {'filetype'}
-    }
+        lualine_x = { 'copilot' },
+        lualine_y = { 'location' },
+        lualine_z = { 'filetype' }
+    },
+    tabline = {},
+    extensions = {},
+    winbar = nil,
 }
 
 return M

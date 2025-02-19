@@ -6,7 +6,14 @@ local M = {
             require("themer").setup(require("configs.ui.themer"))
         end
     },
-    -- Themes
+
+
+
+
+
+    ----------------
+    ---- Themes ----
+    ----------------
 
     { "folke/tokyonight.nvim",          lazy = true },
     {
