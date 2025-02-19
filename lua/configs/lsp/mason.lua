@@ -7,7 +7,11 @@ M.ensure_installed = {
     "ruff",
     "pyright",
     "ols",
-    "glsl_analyzer"
+    "glsl_analyzer",
+    "ts_ls",
+    "tailwindcss",
+    "cssls",
+    "html",
 }
 
 return M

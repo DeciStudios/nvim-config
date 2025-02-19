@@ -15,7 +15,10 @@ M.themes = {
     { name = "OneNord",              colorscheme = "onenord" },
     { name = "Everforest",           colorscheme = "everforest" },
     { name = "Gruvbox Baby",         colorscheme = "gruvbox-baby" },
-    { name = "Gruvbox",              colorscheme = "gruvbox" },
+    { name = "Gruvbox Dark",         colorscheme = "gruvbox",         id = "gruvbox-dark", setup = function() vim.o.background =
+        "dark" end },
+    { name = "Gruvbox Light",        colorscheme = "gruvbox",         id = "gruvbox-light", setup = function() vim.o.background =
+        "light" end },
     { name = "Gruvbox Material",     colorscheme = "gruvbox-material" },
     { name = "Everforest (Sainnhe)", colorscheme = "everforest" },
     { name = "GitHub",               colorscheme = "github_dark" },

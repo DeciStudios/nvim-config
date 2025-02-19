@@ -104,6 +104,18 @@ M.telescope = {
             end,
             "Open file browser",
         },
+        ["<leader>fz"] = {
+            "<cmd>Telescope current_buffer_fuzzy_find<CR>",
+            "Find in current buffer"
+        },
+        ["<leader>gm"] = {
+            "<cmd>Telescope git_commits<CR>",
+            "Git commits"
+        },
+        ["<leader>gs"] = {
+            "<cmd>Telescope git_status<CR>",
+            "Git status"
+        },
     }
 }
 local terminals = require("configs.ui.terminal")

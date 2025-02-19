@@ -18,6 +18,11 @@ M.help = {
             end,
             "Open Cheatsheet"
         },
+        ["<leader>ht"] = {
+            "<cmd>Themer<CR>",
+            "Open Themer"
+        }
+
     }
 }
 

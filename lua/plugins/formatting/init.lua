@@ -8,9 +8,16 @@ local M = {
     },
     {
         "nvimtools/none-ls.nvim",
-        ft = { "python" },
-        opts = function()
-            return require "configs.formatting.null-ls"
+    },
+    {
+        "jay-babu/mason-null-ls.nvim",
+        event = { "BufReadPre", "BufNewFile" },
+        dependencies = {
+            "williamboman/mason.nvim",
+            "nvimtools/none-ls.nvim",
+        },
+        config = function()
+            require('mason-null-ls').setup(require("configs.formatting.null-ls"))  -- require your null-ls config here (example below)
         end,
     },
     {
@@ -51,6 +58,11 @@ local M = {
         end,
     },
 
+
 }
 
-return M
+local merge = require("utils.merge")
+local lua = require("plugins.formatting.lua")
+local web = require("plugins.formatting.web")
+
+return merge(M, lua, web)
