@@ -28,7 +28,7 @@ M.on_attach = function(client, bufnr)
         },
     }
 
-    require("mappings").add_mappings({ lsp = keys })
+    require("mapper").add_mappings({ lsp = keys })
 end
 
 M.on_init = function(client, _)

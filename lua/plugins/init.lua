@@ -5,7 +5,9 @@ local lsp = require('plugins.lsp')
 local theming = require('plugins.theming')
 local ai = require('plugins.ai')
 local libs = require('plugins.libs')
-local plugs = merge(ui, formatting, lsp, theming, ai, libs)
+local fun = require('plugins.fun')
+local mapping = require('plugins.mapping')
+local plugs = merge(libs, ui, formatting, lsp, theming, ai, mapping, fun)
 
 
 
@@ -13,5 +15,3 @@ local plugs = merge(ui, formatting, lsp, theming, ai, libs)
 require("lazy").setup(
     plugs
 )
-
-require("plugins.custom")

@@ -1,14 +1,13 @@
 local M = {
     -- -- Theme Picker
-    -- {
-    --     "zaldih/themery.nvim",
-    --     lazy = false,
-    --     config = function()
-    --         require("themery").setup(require("configs.theming.themery"))
-    --     end
-    -- },
+    {
+        "DeciStudios/themer.nvim",
+        config = function()
+            require("themer").setup(require("configs.ui.themer"))
+        end
+    },
     -- Themes
-    -- { "navarasu/onedark.nvim", lazy = true },
+
     { "folke/tokyonight.nvim",          lazy = true },
     {
         "sainnhe/sonokai",

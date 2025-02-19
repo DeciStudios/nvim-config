@@ -7,7 +7,7 @@ M.settings = {
             "Open config directory"
         },
         ["<leader>st"] = {
-            "<cmd>ThemeSelect<CR>",
+            "<cmd>Themer<CR>",
             "Open Theme Selector"
         }
     }

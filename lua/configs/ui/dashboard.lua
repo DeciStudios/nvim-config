@@ -93,7 +93,7 @@ local M = {
     footer = {
         "",
         "== Fortnite Quote of the Day ==",
-        '"' .. require("plugins.custom.fnquote").quote_of_the_day() .. '"',
+        '"' .. require("fnquote").quote_of_the_day() .. '"',
         "",
         "",
         "Total Plugins:" .. require("lazy").stats().count,
