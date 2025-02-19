@@ -1,7 +1,8 @@
 local M = {
     {
         "lewis6991/gitsigns.nvim",
-        lazy = true,
+        event = { "BufReadPre", "BufNewFile" },         -- Change from lazy = true
+        dependencies = { "nvim-lua/plenary.nvim" },     -- Add this line
         config = function()
             require("gitsigns").setup()
         end
@@ -24,9 +25,8 @@ local M = {
         -- snippet plugin
         "L3MON4D3/LuaSnip",
         dependencies = "rafamadriz/friendly-snippets",
-        opts = require "configs.formatting.luasnip",
-        config = function(_, opts)
-            require("luasnip").config.set_config(opts)
+        config = function()
+            require("configs.formatting.luasnip")
         end,
     },
     {
@@ -79,6 +79,44 @@ local M = {
         event = { "BufWritePre" },
         cmd = { "ConformInfo" },
         opts = require("configs.formatting.conform"),
+    },
+    {
+        "tpope/vim-surround",
+        event = "VeryLazy",
+    },
+    {
+        "mg979/vim-visual-multi",
+        event = "VeryLazy",
+    },
+    {
+        "mattn/emmet-vim",
+        ft = { "html", "css", "javascript", "javascriptreact", "typescript", "typescriptreact" },
+    },
+    {
+        "junegunn/vim-easy-align",
+        event = "VeryLazy",
+    },
+    {
+        "kevinhwang91/nvim-ufo",
+        dependencies = "kevinhwang91/promise-async",
+        event = "BufReadPost",
+        config = function()
+            require("configs.formatting.ufo")
+        end
+    },
+    {
+        "phaazon/hop.nvim",
+        event = "BufReadPost",
+        config = function()
+            require("configs.formatting.hop")
+        end
+    },
+    {
+        "ThePrimeagen/harpoon",
+        dependencies = "nvim-lua/plenary.nvim",
+        config = function()
+            require("configs.formatting.harpoon")
+        end
     },
 
 }

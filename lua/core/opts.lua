@@ -33,7 +33,7 @@ opt.shortmess:append "sI"
 o.signcolumn = "yes"
 o.splitbelow = true
 o.splitright = true
-o.timeoutlen = 400
+o.timeoutlen = 300
 o.undofile = true
 
 -- interval for writing swap file to disk, also used by gitsigns
@@ -45,3 +45,11 @@ opt.undofile = true
 opt.undodir = vim.fn.stdpath("data") .. "/undodir"
 opt.undolevels = 1000
 opt.undoreload = 10000
+opt.lazyredraw = true
+opt.scrolloff = 8
+opt.inccommand = "nosplit"
+g.user_emmet_leader_key = '<C-y>'
+g.user_emmet_mode = 'a' -- enable in all modes
+g.user_emmet_install_global = 1
+opt.foldlevel = 99
+opt.foldlevelstart = 99

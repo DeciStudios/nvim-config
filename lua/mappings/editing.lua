@@ -51,6 +51,23 @@ M.editing = {
             "<cmd>UndotreeToggle<CR>",
             "Toggle Undotree"
         },
+        ["<C-s>"] = { ":w<CR>", "Quick save" },
+
+        -- Duplicate line
+        ["<C-d>"] = { "yyp", "Duplicate line" },
+
+        -- Move lines up/down
+        ["<A-j>"] = { ":m .+1<CR>==", "Move line down" },
+        ["<A-k>"] = { ":m .-2<CR>==", "Move line up" },
+
+        -- Quick indent/dedent
+        [">"] = { ">>", "Indent" },
+        ["<"] = { "<<", "Dedent" },
+
+        -- Quick end of line
+        ["<C-e>"] = { "$", "End of line" },
+        ["<C-a>"] = { "^", "Start of line" },
+        ["ga"] = { "<Plug>(EasyAlign)", "Easy Align" },
     },
     -- Visual mode mappings
     v = {
@@ -89,6 +106,13 @@ M.editing = {
             "<esc><C-r>",
             "Redo"
         },
+        ["<A-j>"] = { ":m '>+1<CR>gv=gv", "Move selection down" },
+        ["<A-k>"] = { ":m '<-2<CR>gv=gv", "Move selection up" },
+
+        -- Keep visual selection when indenting
+        [">"] = { ">gv", "Indent" },
+        ["<"] = { "<gv", "Dedent" },
+        ["ga"] = { "<Plug>(EasyAlign)", "Easy Align" },
     },
     i = {
         ["<C-z>"] = {
@@ -99,6 +123,21 @@ M.editing = {
             "<C-o><C-r>",
             "Redo"
         },
+        ["jk"] = { "<ESC>", "Escape insert mode" },
+        ["kj"] = { "<ESC>", "Escape insert mode" },
+
+        -- Quick save in insert mode
+        ["<C-s>"] = { "<ESC>:w<CR>a", "Save file" },
+
+        -- Quick movement in insert mode
+        ["<C-h>"] = { "<Left>", "Move left" },
+        ["<C-l>"] = { "<Right>", "Move right" },
+        ["<C-j>"] = { "<Down>", "Move down" },
+        ["<C-k>"] = { "<Up>", "Move up" },
+
+        -- Quick end/start of line in insert mode
+        ["<C-e>"] = { "<ESC>A", "End of line" },
+        ["<C-a>"] = { "<ESC>I", "Start of line" },
     }
 }
 

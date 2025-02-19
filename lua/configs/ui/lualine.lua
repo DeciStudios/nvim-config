@@ -32,17 +32,17 @@ local M = {
     sections = {
         lualine_a = { {
             'mode',
-            fmt = function(str)
-                if str == "NORMAL" then
-                    return ' ' .. str
-                elseif str == "INSERT" then
-                    return ' ' .. str
-                elseif str == "VISUAL" then
-                    return '󰈈 ' .. str
-                elseif str == "V-LINE" then
-                    return ' ' .. str
-                end
-            end
+            -- fmt = function(str)
+            --     if str == "NORMAL" then
+            --         return ' ' .. str
+            --     elseif str == "INSERT" then
+            --         return ' ' .. str
+            --     elseif str == "VISUAL" then
+            --         return '󰈈 ' .. str
+            --     elseif str == "V-LINE" then
+            --         return ' ' .. str
+            --     end
+            -- end
         } -- Add icon before the mode text
         },
         lualine_b = {

@@ -2,23 +2,23 @@ local M = {}
 
 M.help = {
     n = {
-        ["<leader>hh"] = {
+        ["<leader>?h"] = {
             "<cmd>:help<CR>",
             "Help"
         },
-        ["<leader>hk"] = {
+        ["<leader>?k"] = {
             function()
                 require("which-key").show()
             end,
             "Open Which Key"
         },
-        ["<leader>hc"] = {
+        ["<leader>?c"] = {
             function()
                 require("mapper-cheatsheet").show_cheatsheet()
             end,
             "Open Cheatsheet"
         },
-        ["<leader>ht"] = {
+        ["<leader>?t"] = {
             "<cmd>Themer<CR>",
             "Open Themer"
         }

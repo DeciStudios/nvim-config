@@ -120,6 +120,25 @@ local M = {
             require("toggleterm").setup(require("configs.ui.terminal.opts"))
         end
     },
+    {
+        "folke/todo-comments.nvim",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        config = function()
+            require("configs.ui.todo-comments")
+        end
+    },
+    {
+        "nvim-neorg/neorg",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter",
+        },
+        cmd = "Neorg",
+        ft = "norg",
+        config = function()
+            require("configs.ui.neorg")
+        end
+    }
 
 }
 return M
