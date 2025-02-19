@@ -14,15 +14,15 @@ local M = {
         -- Add a fallback formatter for unknown filetypes
         ["*"] = { "trim_whitespace", "trim_newlines" },
     },
-    format_on_save = {
+    -- Replace format_on_save with format_after_save for async formatting
+    format_after_save = {
         timeout_ms = 500,
-        lsp_fallback = true, -- This is important
-        async = true,
+        lsp_fallback = true,
     },
     formatters = {
         odin_fmt = {
-            command = "odin",
-            args = { "fmt", "$FILENAME" },
+            command = "odinfmt",
+            args = { "$FILENAME" },
             stdin = false,
         },
     },

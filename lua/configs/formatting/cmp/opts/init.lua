@@ -51,18 +51,17 @@ local M = {
     sources = cmp.config.sources({
 
         { name = 'nvim_lsp', group_index = 1 }, -- LSP completions
-        { name = 'copilot',  group_index = 2 }, -- Keep Copilot as highest priority
         { name = 'luasnip',  group_index = 2 }, -- Snippets
         { name = 'path',     group_index = 3 }, -- Path
     }),
     completion = {
-        keyword_length = 2, -- Minimum length before showing completions
+        keyword_length = 1, -- Minimum length before showing completions
         completeopt = 'menu,menuone,noselect',
         keyword_pattern = [[\%(-\?\d\+\%(\.\d\+\)\?\|\h\w*\%(-\w*\)*\)]],
     },
-    -- experimental = {
-    --     ghost_text = true,
-    -- },
+    experimental = {
+        ghost_text = true,
+    },
 }
 
 return M
