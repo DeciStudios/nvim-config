@@ -15,18 +15,21 @@ local seperatorTypes = {
         section = { left = '', right = '' },
         component = { left = '', right = '' }
     },
+    none = {
+        section = { left = '', right = '' },
+        component = { left = '', right = '' }
+    }
 
 }
 
 local M = {
     options = {
-        icons_enabled = true,
-        component_separators = seperatorTypes.curve.component,
-        section_separators = seperatorTypes.curve.section,
+        icons_enabled = false,
+        component_separators = seperatorTypes.none.component,
+        section_separators = seperatorTypes.none.section,
     },
     sections = {
-        lualine_a = {
-            {
+            lualine_a = {{
                 'mode',
                 fmt = function(str)
                     if str == "NORMAL" then
@@ -41,10 +44,18 @@ local M = {
                 end
             } -- Add icon before the mode text
         },
-
-        lualine_x = {
-            "copilot", "encoding", "fileformat"
-        }
+        lualine_b = {
+            "branch", 
+        },
+        lualine_c = {
+            'filename',
+            --function()
+            --    return vim.fn['nvim_treesitter#statusline'](180)
+            --end
+        },
+        lualine_x = {'copilot'},
+        lualine_y = {'location'},
+        lualine_z = {'filetype'}
     }
 }
 

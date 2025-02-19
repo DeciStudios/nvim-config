@@ -1,4 +1,5 @@
 local M = {}
+local cmp = require("cmp")
 
 M.copilot = {
     n = {
@@ -30,6 +31,7 @@ M.copilot = {
         }
     }
 }
+
 
 
 return M

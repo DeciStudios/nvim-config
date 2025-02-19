@@ -40,13 +40,26 @@ local M = {
                 fallback()
             end
         end, { "i", "s" }),
+        -- Disable arrow keys for completion
+        ['<Up>'] = cmp.mapping(function(fallback)
+            fallback()
+        end),
+        ['<Down>'] = cmp.mapping(function(fallback)
+            fallback()
+        end),
     }),
     sources = cmp.config.sources({
-        { name = 'nvim_lsp', group_index = 2 },
-        { name = 'luasnip',  group_index = 2 },
-        { name = 'buffer',   group_index = 2 },
-        { name = 'path',     group_index = 2 },
+
+        { name = 'nvim_lsp', group_index = 1 }, -- LSP completions
+        { name = 'copilot',  group_index = 2 }, -- Keep Copilot as highest priority
+        { name = 'luasnip',  group_index = 2 }, -- Snippets
+        { name = 'path',     group_index = 3 }, -- Path
     }),
+    completion = {
+        keyword_length = 2, -- Minimum length before showing completions
+        completeopt = 'menu,menuone,noselect',
+        keyword_pattern = [[\%(-\?\d\+\%(\.\d\+\)\?\|\h\w*\%(-\w*\)*\)]],
+    },
     -- experimental = {
     --     ghost_text = true,
     -- },

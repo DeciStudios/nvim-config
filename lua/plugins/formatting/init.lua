@@ -17,7 +17,7 @@ local M = {
             "nvimtools/none-ls.nvim",
         },
         config = function()
-            require('mason-null-ls').setup(require("configs.formatting.null-ls"))  -- require your null-ls config here (example below)
+            require('mason-null-ls').setup(require("configs.formatting.null-ls")) -- require your null-ls config here (example below)
         end,
     },
     {
@@ -57,7 +57,19 @@ local M = {
             require("configs.formatting.cmp")
         end,
     },
-
+    {
+        "numToStr/Comment.nvim",
+        event = { "BufReadPre", "BufNewFile" },
+        config = function()
+            require("Comment").setup({
+                -- Use treesitter to determine context
+                pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+            })
+        end,
+        dependencies = {
+            "JoosepAlviste/nvim-ts-context-commentstring", -- Better comment support for embedded languages
+        },
+    },
 
 }
 

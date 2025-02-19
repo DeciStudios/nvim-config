@@ -1,5 +1,7 @@
 local M = {}
+vim.g.nvim_tree_respect_buf_cwd = 1
 
+M.update_cwd =true 
 M.renderer = {
     root_folder_label = false,
     highlight_git = true,

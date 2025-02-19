@@ -1,5 +1,7 @@
 local M = {}
 
+
+
 M["nvim-tree"] = {
     n = {
         ["<C-n>"] = {
@@ -14,6 +16,10 @@ M["nvim-tree"] = {
             "<cmd>NvimTreeFocus<CR>",
             "Focus NvimTree"
         },
+    }
+}
+M.buffers = {
+    n = {
         ["<A-<>"] = {
             "<cmd>BufferMovePrevious<CR>",
             "Move buffer left"
@@ -63,11 +69,6 @@ M["nvim-tree"] = {
             "<cmd>BufferLast<CR>",
             "Go to last buffer"
         },
-    }
-}
-
-M.buffer = {
-    n = {
         ["<leader>x"] = {
             "<cmd>BufferClose<CR>",
             "Close current buffer"
