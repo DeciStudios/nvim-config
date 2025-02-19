@@ -140,7 +140,28 @@ M.editing = {
         ["<C-a>"] = { "<ESC>I", "Start of line" },
     }
 }
-
+M.multicursor = {
+    n = {
+        ["<C-Up>"] = {
+            "<cmd>MultipleCursorsAddUp<CR>",
+            "Add cursor above"
+        },
+        ["<C-Down>"] = {
+            "<cmd>MultipleCursorsAddDown<CR>",
+            "Add cursor below"
+        },
+    },
+    i = {
+        ["<C-Up>"] = {
+            "<cmd>MultipleCursorsAddUp<CR>",
+            "Add cursor above"
+        },
+        ["<C-Down>"] = {
+            "<cmd>MultipleCursorsAddDown<CR>",
+            "Add cursor below"
+        },
+    },
+}
 -- Additional editing utilities can go here
 M.editing.n["<leader>cf"] = {
     function()

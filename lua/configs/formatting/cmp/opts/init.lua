@@ -1,6 +1,6 @@
 local appearance = require("configs.formatting.cmp.opts.appearance")
-local cmp = require('cmp')
-local luasnip = require('luasnip')
+local cmp = require("cmp")
+local luasnip = require("luasnip")
 local has_words_before = function()
     unpack = unpack or table.unpack
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -15,11 +15,18 @@ local M = {
     window = appearance.window,
     formatting = appearance.formatting,
     mapping = cmp.mapping.preset.insert({
-        ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-        ['<C-f>'] = cmp.mapping.scroll_docs(4),
-        ['<C-Space>'] = cmp.mapping.complete(),
-        ['<C-e>'] = cmp.mapping.abort(),
-        ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+        ["<C-f>"] = cmp.mapping.scroll_docs(4),
+        ["<C-Space>"] = cmp.mapping.complete(),
+        ["<C-e>"] = cmp.mapping.abort(),
+        ["<C-BS>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.close()
+            else
+                fallback()
+            end
+        end),
+        ["<CR>"] = cmp.mapping.confirm({ select = true }),
         ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_next_item()
@@ -41,27 +48,27 @@ local M = {
             end
         end, { "i", "s" }),
         -- Disable arrow keys for completion
-        ['<Up>'] = cmp.mapping(function(fallback)
+        ["<Up>"] = cmp.mapping(function(fallback)
             fallback()
         end),
-        ['<Down>'] = cmp.mapping(function(fallback)
+        ["<Down>"] = cmp.mapping(function(fallback)
             fallback()
         end),
     }),
     sources = cmp.config.sources({
 
-        { name = 'nvim_lsp', group_index = 1 }, -- LSP completions
-        { name = 'luasnip',  group_index = 2 }, -- Snippets
-        { name = 'path',     group_index = 3 }, -- Path
+        { name = "nvim_lsp", group_index = 1 }, -- LSP completions
+        { name = "luasnip",  group_index = 2 }, -- Snippets
+        { name = "path",     group_index = 3 }, -- Path
     }),
     completion = {
         keyword_length = 1, -- Minimum length before showing completions
-        completeopt = 'menu,menuone,noselect',
+        completeopt = "menu,menuone,noselect",
         keyword_pattern = [[\%(-\?\d\+\%(\.\d\+\)\?\|\h\w*\%(-\w*\)*\)]],
     },
-    experimental = {
-        ghost_text = true,
-    },
+    -- experimental = {
+    --     ghost_text = true,
+    -- },
 }
 
 return M
