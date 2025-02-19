@@ -1,25 +1,14 @@
 local M = {
     {
         "lewis6991/gitsigns.nvim",
-        event = { "BufReadPre", "BufNewFile" },         -- Change from lazy = true
-        dependencies = { "nvim-lua/plenary.nvim" },     -- Add this line
+        event = { "BufReadPre", "BufNewFile" },     -- Change from lazy = true
+        dependencies = { "nvim-lua/plenary.nvim" }, -- Add this line
         config = function()
             require("gitsigns").setup()
         end
     },
     {
         "nvimtools/none-ls.nvim",
-    },
-    {
-        "jay-babu/mason-null-ls.nvim",
-        event = { "BufReadPre", "BufNewFile" },
-        dependencies = {
-            "williamboman/mason.nvim",
-            "nvimtools/none-ls.nvim",
-        },
-        config = function()
-            require('mason-null-ls').setup(require("configs.formatting.null-ls")) -- require your null-ls config here (example below)
-        end,
     },
     {
         -- snippet plugin
@@ -59,6 +48,17 @@ local M = {
         },
         config = function()
             require("configs.formatting.cmp")
+        end,
+    },
+    {
+        "zapling/mason-conform.nvim",
+        event = { "BufReadPre", "BufNewFile" },
+        dependencies = {
+            "williamboman/mason.nvim",
+            "stevearc/conform.nvim",
+        },
+        config = function()
+            require("mason-conform").setup(require("configs.formatting.conform.mason"))
         end,
     },
     {
@@ -111,13 +111,13 @@ local M = {
             require("configs.formatting.hop")
         end
     },
-    {
-        "ThePrimeagen/harpoon",
-        dependencies = "nvim-lua/plenary.nvim",
-        config = function()
-            require("configs.formatting.harpoon")
-        end
-    },
+    -- {
+    --     "ThePrimeagen/harpoon",
+    --     dependencies = "nvim-lua/plenary.nvim",
+    --     config = function()
+    --         require("configs.formatting.harpoon")
+    --     end
+    -- },
 
 }
 

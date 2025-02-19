@@ -40,22 +40,22 @@ M.navigation = {
         ["<leader>Hc"] = { "<cmd>HopChar1<CR>", "Hop to character" },
 
         -- Harpoon
-        ["<leader>Ha"] = {
-            function() require("harpoon.mark").add_file() end,
-            "Add file to harpoon"
-        },
-        ["<leader>Hm"] = {
-            function() require("harpoon.ui").toggle_quick_menu() end,
-            "Harpoon menu"
-        },
-        ["<C-n>"] = {
-            function() require("harpoon.ui").nav_next() end,
-            "Next harpoon mark"
-        },
-        ["<C-p>"] = {
-            function() require("harpoon.ui").nav_prev() end,
-            "Previous harpoon mark"
-        },
+        -- ["<leader>Ha"] = {
+        --     function() require("harpoon.mark").add_file() end,
+        --     "Add file to harpoon"
+        -- },
+        -- ["<leader>Hm"] = {
+        --     function() require("harpoon.ui").toggle_quick_menu() end,
+        --     "Harpoon menu"
+        -- },
+        -- ["<C-n>"] = {
+        --     function() require("harpoon.ui").nav_next() end,
+        --     "Next harpoon mark"
+        -- },
+        -- ["<C-p>"] = {
+        --     function() require("harpoon.ui").nav_prev() end,
+        --     "Previous harpoon mark"
+        -- },
         ["<leader>z"] = {
             function()
                 local winid = vim.api.nvim_get_current_win()
