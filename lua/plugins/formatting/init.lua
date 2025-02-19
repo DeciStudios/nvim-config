@@ -70,6 +70,12 @@ local M = {
             "JoosepAlviste/nvim-ts-context-commentstring", -- Better comment support for embedded languages
         },
     },
+    {
+        "stevearc/conform.nvim",
+        event = { "BufWritePre" },
+        cmd = { "ConformInfo" },
+        opts = require("configs.formatting.conform"),
+    },
 
 }
 

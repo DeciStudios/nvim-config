@@ -29,6 +29,11 @@ M.on_attach = function(client, bufnr)
     }
 
     require("mapper").add_mappings({ lsp = keys })
+    if client.supports_method("textDocument/formatting") then
+        vim.api.nvim_buf_create_user_command(bufnr, "Format", function()
+            vim.lsp.buf.format({ async = true })
+        end, { desc = "Format current buffer" })
+    end
 end
 
 M.on_init = function(client, _)
@@ -40,7 +45,13 @@ end
 -- Configure LSP handlers
 require("configs.lsp.handlers").setup()
 
-M.capabilities = capabilities
+M.capabilities = vim.tbl_deep_extend("force", capabilities, {
+    textDocument = {
+        formatting = {
+            dynamicRegistration = true
+        }
+    }
+})
 M.capabilities.textDocument.completion.completionItem = {
     documentationFormat = { "markdown", "plaintext" },
     snippetSupport = true,

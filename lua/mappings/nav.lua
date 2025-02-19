@@ -45,7 +45,14 @@ M.navigation = {
             "<C-w>k",
             "Move to the above window",
         },
-
+        ["<C-+>"] = {
+            "zA",
+            "Open fold",
+        },
+        ["<C-->"] = {
+            "zc",
+            "Close fold",
+        },
     }
 }
 

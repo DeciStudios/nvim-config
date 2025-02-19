@@ -24,6 +24,16 @@ M.editing = {
             end,
             "Toggle block comment"
         },
+        -- Copy to system clipboard
+        ["<C-S-c>"] = {
+            '"+y',
+            "Copy to system clipboard"
+        },
+        -- Paste from system clipboard
+        ["<C-S-v>"] = {
+            '"+p',
+            "Paste from system clipboard"
+        },
     },
     -- Visual mode mappings
     v = {
@@ -36,6 +46,23 @@ M.editing = {
         ["<leader>cb"] = {
             "<ESC><cmd>lua require('Comment.api').toggle.blockwise(vim.fn.visualmode())<CR>",
             "Toggle block comment on selection"
+        },
+
+        -- Copy to system clipboard
+        ["<C-S-c>"] = {
+            '"+y',
+            "Copy to system clipboard"
+        },
+        -- Paste from system clipboard
+        ["<C-S-v>"] = {
+            '"+p',
+            "Paste from system clipboard"
+        },
+        ["<leader>cf"] = {
+            function()
+                require("conform").format({ async = true })
+            end,
+            "Format buffer"
         },
     }
 }
