@@ -28,7 +28,7 @@ o.number = true
 o.numberwidth = 2
 o.ruler = false
 -- disable nvim intro
-opt.shortmess:append "sI"
+opt.shortmess:append("sI")
 
 o.signcolumn = "yes"
 o.splitbelow = true
@@ -38,7 +38,7 @@ o.undofile = true
 
 -- interval for writing swap file to disk, also used by gitsigns
 o.updatetime = 250
-opt.winbar = ""    -- Disable the winbar
+opt.winbar = "" -- Disable the winbar
 opt.laststatus = 3 -- Global statusline
 opt.termguicolors = true
 opt.undofile = true
@@ -48,8 +48,14 @@ opt.undoreload = 10000
 opt.lazyredraw = true
 opt.scrolloff = 8
 opt.inccommand = "nosplit"
-g.user_emmet_leader_key = '<C-y>'
-g.user_emmet_mode = 'a' -- enable in all modes
+g.user_emmet_leader_key = "<C-y>"
+g.user_emmet_mode = "a" -- enable in all modes
 g.user_emmet_install_global = 1
 opt.foldlevel = 99
 opt.foldlevelstart = 99
+opt.whichwrap = {
+	["<"] = true,
+	[">"] = true,
+	["["] = true,
+	["]"] = true,
+}
