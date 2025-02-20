@@ -28,6 +28,26 @@ M.copilot = {
                 })
             end,
             "Open Copilot inline chat"
+        },
+        ["<leader>gcs"] = {
+            function()
+                require("configs.ai.copilotchat_save_load_win").open_window(true)
+            end,
+            "Save Copilot chat"
+        },
+        ["<leader>gcl"] = {
+            function()
+                require("configs.ai.copilotchat_save_load_win").open_window(false)
+            end,
+            "Load Copilot chat"
+        },
+        ["<leader>gcn"] = {
+            function()
+                require("CopilotChat").open()
+                require("configs.ai.copilotchat_save_load_win").reset_saved_chat_name()
+                vim.cmd("CopilotChatReset")
+            end,
+            "New Copilot chat"
         }
     }
 }
