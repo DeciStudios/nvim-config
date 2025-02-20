@@ -1,81 +1,95 @@
 local M = {}
 
-
-
 M["nvim-tree"] = {
-    n = {
-        ["<C-n>"] = {
-            "<cmd>NvimTreeToggle<CR>",
-            "Toggle NvimTree"
-        },
-        ["<C-f>"] = {
-            "<cmd>NvimTreeFindFile<CR>",
-            "Find file in NvimTree"
-        },
-        ["<leader>e"] = {
-            "<cmd>NvimTreeFocus<CR>",
-            "Focus NvimTree"
-        },
-    }
+	n = {
+		["<C-n>"] = {
+			"<cmd>NvimTreeToggle<CR>",
+			"Toggle NvimTree",
+		},
+		["<C-f>"] = {
+			"<cmd>NvimTreeFindFile<CR>",
+			"Find file in NvimTree",
+		},
+		["<leader>e"] = {
+			"<cmd>NvimTreeFocus<CR>",
+			"Focus NvimTree",
+		},
+	},
 }
 
-
 M.telescope = {
-    n = {
-        ["<leader>fw"] = {
-            "<cmd>Telescope live_grep<CR>",
-            "Find in files"
-        },
-        ["<leader>ff"] = {
-            "<cmd>Telescope find_files<CR>",
-            "Find files"
-        },
-        ["<leader>fa"] = {
-            "<cmd>Telescope find_files follow=true no_ignore=true hidden=true<CR>",
-            "Find in hidden files"
-        },
-        ["<leader>fd"] = {
-            function()
-                require("telescope").extensions.file_browser.file_browser()
-            end,
-            "Open file browser",
-        },
-        ["<leader>fz"] = {
-            "<cmd>Telescope current_buffer_fuzzy_find<CR>",
-            "Find in current buffer"
-        },
-        ["<leader>gm"] = {
-            "<cmd>Telescope git_commits<CR>",
-            "Git commits"
-        },
-        ["<leader>gs"] = {
-            "<cmd>Telescope git_status<CR>",
-            "Git status"
-        },
-    }
+	n = {
+		["<leader>fw"] = {
+			"<cmd>Telescope live_grep<CR>",
+			"Find in files",
+		},
+		["<leader>ff"] = {
+			"<cmd>Telescope find_files<CR>",
+			"Find files",
+		},
+		["<leader>fa"] = {
+			"<cmd>Telescope find_files follow=true no_ignore=true hidden=true<CR>",
+			"Find in hidden files",
+		},
+		["<leader>fd"] = {
+			function()
+				require("telescope").extensions.file_browser.file_browser()
+			end,
+			"Open file browser",
+		},
+		["<leader>fz"] = {
+			"<cmd>Telescope current_buffer_fuzzy_find<CR>",
+			"Find in current buffer",
+		},
+		["<leader>gm"] = {
+			"<cmd>Telescope git_commits<CR>",
+			"Git commits",
+		},
+		["<leader>gs"] = {
+			"<cmd>Telescope git_status<CR>",
+			"Git status",
+		},
+	},
 }
 local terminals = require("configs.ui.terminal")
 
 M.terminal = {
-    n = {
-        ["<leader>th"] = {
-            function() terminals.horizontal:toggle() end,
-            "Toggle horizontal terminal"
-        },
-        ["<leader>tv"] = {
-            function() terminals.vertical:toggle() end,
-            "Toggle vertical terminal"
-        },
-        ["<leader>tnh"] = {
-            function() terminals.new_horizontal() end,
-            "New horizontal terminal"
-        },
-        ["<leader>tnv"] = {
-            function() terminals.new_vertical() end,
-            "New vertical terminal"
-        },
-    },
-    t = {}
+	n = {
+		["<leader>th"] = {
+			function()
+				terminals.horizontal:toggle()
+			end,
+			"Toggle horizontal terminal",
+		},
+		["<leader>tv"] = {
+			function()
+				terminals.vertical:toggle()
+			end,
+			"Toggle vertical terminal",
+		},
+		["<leader>tnh"] = {
+			function()
+				terminals.new_horizontal()
+			end,
+			"New horizontal terminal",
+		},
+		["<leader>tnv"] = {
+			function()
+				terminals.new_vertical()
+			end,
+			"New vertical terminal",
+		},
+	},
+	t = {},
+}
+
+M.git = {
+	n = {
+		["<leader>gl"] = {
+			"<cmd>LazyGit<CR>",
+			"Open LazyGit",
+		},
+	},
 }
 
 M.terminal.n["<A-h>"] = M.terminal.n["<leader>th"]
