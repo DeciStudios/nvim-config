@@ -76,6 +76,10 @@ M.editing = {
 			end,
 			"Find and replace (ssr)",
 		},
+		["w"] = {
+			":w<CR>",
+			"Quick save",
+		},
 	},
 	x = {},
 	-- Visual mode mappings
