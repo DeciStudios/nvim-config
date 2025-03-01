@@ -19,12 +19,16 @@ local seperatorTypes = {
 		section = { left = "", right = "" },
 		component = { left = "", right = "" },
 	},
+	space = {
+		section = { left = " ", right = " " },
+		component = { left = " ", right = " " },
+	},
 }
 
 local M = {
 	options = {
 		icons_enabled = false,
-		component_separators = seperatorTypes.slant.component,
+		component_separators = seperatorTypes.none.component,
 		section_separators = seperatorTypes.slant.section,
 		globalstatus = true, -- Add this line
 	},
@@ -50,6 +54,12 @@ local M = {
 		},
 		lualine_c = {
 			"filename",
+			{
+				"diagnostics",
+				sources = { "nvim_diagnostic" }, -- Use nvim_lsp to get diagnostics from LSP
+				sections = { "error", "warn" }, -- Show only errors and warnings
+				symbols = { error = "󰅙 ", warn = " " }, -- Customize symbols
+			},
 			--function()
 			--    return vim.fn['nvim_treesitter#statusline'](180)
 			--end

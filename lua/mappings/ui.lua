@@ -10,7 +10,7 @@ M["nvim-tree"] = {
 			"<cmd>NvimTreeFindFile<CR>",
 			"Find file in NvimTree",
 		},
-		["<leader>e"] = {
+		["<leader>a"] = {
 			"<cmd>NvimTreeFocus<CR>",
 			"Focus NvimTree",
 		},
@@ -88,6 +88,15 @@ M.git = {
 		["<leader>gl"] = {
 			"<cmd>LazyGit<CR>",
 			"Open LazyGit",
+		},
+	},
+}
+
+M.trouble = {
+	n = {
+		["<leader>e"] = {
+			"<cmd>Trouble diagnostics toggle<cr>",
+			"Toggle trouble (diagnostics)",
 		},
 	},
 }
