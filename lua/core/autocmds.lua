@@ -7,8 +7,24 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 })
 
 --Auto open diagnostic float
-vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-	callback = function()
+
+local function show_diagnostics_if_normal()
+	if vim.api.nvim_get_mode().mode == "n" then
 		vim.diagnostic.open_float()
-	end,
+	end
+end
+
+local function hide_diagnostics()
+	vim.diagnostic.hide()
+end
+
+-- Open diagnostics when scrolling in normal mode
+vim.api.nvim_create_autocmd({ "CursorMoved", "CursorHoldI" }, {
+	callback = show_diagnostics_if_normal,
+})
+
+-- Hide diagnostics when entering insert or visual mode
+vim.api.nvim_create_autocmd("ModeChanged", {
+	pattern = "*:[iv]*", -- Detect entering Insert or Visual mode
+	callback = hide_diagnostics,
 })

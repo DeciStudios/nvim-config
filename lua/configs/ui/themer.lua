@@ -31,6 +31,8 @@ M.themes = {
 			vim.o.background = "light"
 		end,
 	},
+	{ name = "Cyberpunk", colorscheme = "cyberpunk" },
+
 	{ name = "Gruvbox Material", colorscheme = "gruvbox-material" },
 	{ name = "Everforest (Sainnhe)", colorscheme = "everforest" },
 	{ name = "GitHub", colorscheme = "github_dark" },
