@@ -8,6 +8,7 @@ local libs = require("plugins.libs")
 local fun = require("plugins.fun")
 local media = require("plugins.media")
 local mapping = require("plugins.mapping")
-local plugs = merge(libs, ui, formatting, lsp, theming, mapping, media, fun)
+local api = require("plugins.api")
+local plugs = merge(libs, ui, formatting, lsp, theming, mapping, media, fun, api)
 
 require("lazy").setup(plugs)

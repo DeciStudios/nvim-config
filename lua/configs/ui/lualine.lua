@@ -64,7 +64,9 @@ local M = {
 			--    return vim.fn['nvim_treesitter#statusline'](180)
 			--end
 		},
-		lualine_x = { "copilot" },
+		lualine_x = {
+			"copilot",
+		},
 		lualine_y = { "location" },
 		lualine_z = { "filetype" },
 	},
